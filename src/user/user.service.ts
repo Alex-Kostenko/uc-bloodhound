@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { User, Prisma } from '@prisma/client';
+import { IUserUpdate } from './dtos/userUpdate';
 
 @Injectable()
 export class UserService {
@@ -39,18 +40,22 @@ export class UserService {
 
   async updateUser(params: {
     where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
+    data: IUserUpdate;
   }): Promise<User> {
     const { where, data } = params;
     return this.prisma.user.update({
       data,
-      where,
+      where: {
+        id: Number(where),
+      },
     });
   }
 
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
     return this.prisma.user.delete({
-      where,
+      where: {
+        id: Number(where),
+      },
     });
   }
 }
