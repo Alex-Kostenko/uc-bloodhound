@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { User, Prisma } from '@prisma/client';
 import { IUserUpdate } from './dtos/userUpdate';
+import { genSaltSync, hashSync } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -33,8 +34,19 @@ export class UserService {
   }
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
+    const hashedPassword = this.hashPassword(data.password);
+    const newData = { ...data };
+    newData.password = hashedPassword;
     return this.prisma.user.create({
-      data,
+      data: newData,
+    });
+  }
+
+  async findUser(idOrEmail: string) {
+    return this.prisma.user.findFirst({
+      where: {
+        OR: [{ id: Number(idOrEmail) }, { email: idOrEmail }],
+      },
     });
   }
 
@@ -57,5 +69,9 @@ export class UserService {
         id: Number(where),
       },
     });
+  }
+
+  private hashPassword(password: string) {
+    return hashSync(password, genSaltSync(10));
   }
 }
