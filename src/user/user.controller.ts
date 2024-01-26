@@ -1,45 +1,50 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
   Param,
-  Patch,
-  Post,
+  ParseUUIDPipe,
+  Put,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { UserResponse } from './responses';
 import { UserService } from './user.service';
-import { IUser } from './dtos/userCreate';
-import { IUserUpdate } from './dtos/userUpdate';
+import { JwtPayload } from 'src/auth/interfaces';
+import { CurrentUser } from 'src/decorators';
+import { JwtAuthGuard } from 'src/decorators/guardToken';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Get()
-  async getAllUsers(): Promise<User[]> {
-    const users = await this.userService.users({});
-    return users;
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get(':idOrEmail')
+  async findOneUser(@Param('idOrEmail') idOrEmail: string) {
+    const user = await this.userService.findOne(idOrEmail);
+    return new UserResponse(user);
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id') id): Promise<User> {
-    const users = await this.userService.deleteUser(id);
-    return users;
+  async deleteUser(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.userService.delete(id, user);
   }
 
-  @Post()
-  async createUser(@Body() createUserDto: IUser): Promise<IUser> {
-    const user = await this.userService.createUser(createUserDto);
+  @Get()
+  me(@CurrentUser() user: JwtPayload) {
     return user;
   }
 
-  @Patch(':id')
-  async update(@Param('id') id, @Body() createUserDto: IUserUpdate) {
-    const updateUser = await this.userService.updateUser({
-      where: id,
-      data: createUserDto,
-    });
-    return updateUser;
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Put()
+  async updateUser(@Body() body: Partial<User>) {
+    const user = await this.userService.save(body);
+    return new UserResponse(user);
   }
 }
