@@ -10,12 +10,13 @@ import { JwtService } from '@nestjs/jwt';
 import { Provider, Token, User } from '@prisma/client';
 import { compareSync } from 'bcrypt';
 import { add } from 'date-fns';
-import { v4 } from 'uuid';
-import { LoginDto } from './dto';
-import { Tokens } from './interfaces';
-import { UserService } from 'src/user/user.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from 'src/user/dto/createUser';
+import { UserService } from 'src/user/user.service';
+import { v4 } from 'uuid';
+
+import { LoginDto } from './dto';
+import { Tokens } from './interfaces';
 
 @Injectable()
 export class AuthService {

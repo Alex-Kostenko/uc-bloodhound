@@ -4,11 +4,12 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+
+import { AuthModule } from './auth/auth.module';
+import { UserMiddleware } from './decorators/getUserMiddleware';
 import { PrismaModule } from './prisma/prisma.module';
-import { UserMiddleware } from "./decorators/getUserMiddleware";
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -18,7 +19,6 @@ import { UserMiddleware } from "./decorators/getUserMiddleware";
     ConfigModule.forRoot({ isGlobal: true }),
   ],
 })
-  
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer

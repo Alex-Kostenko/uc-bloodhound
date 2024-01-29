@@ -14,12 +14,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { AuthService } from './auth.service';
-import { LoginDto } from './dto';
-import { GoogleGuard } from './guargs/google.guard';
 import { Public, UserAgent } from 'src/decorators';
 import { Token } from 'src/decorators/getvalidToken';
 import { CreateUserDto } from 'src/user/dto/createUser';
+
+import { AuthService } from './auth.service';
+import { LoginDto } from './dto';
+import { GoogleGuard } from './guargs/google.guard';
 
 @Public()
 @Controller('auth')

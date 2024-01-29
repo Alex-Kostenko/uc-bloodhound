@@ -1,11 +1,13 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Injectable, Inject } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { User, Prisma } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt';
 import { Cache } from 'cache-manager';
 import { convertToSecondsUtil } from 'src/utils';
-import { ConfigService } from '@nestjs/config';
+
+import { PrismaService } from '../prisma/prisma.service';
+
 import { CreateUserDto } from './dto/createUser';
 import { UpdateUserDto } from './dto/updateUser';
 
