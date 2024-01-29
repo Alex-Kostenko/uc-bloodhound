@@ -2,7 +2,7 @@ import { ExecutionContext } from '@nestjs/common';
 import { createParamDecorator } from '@nestjs/common';
 import { JwtPayload } from 'src/auth/interfaces';
 
-export const CurrentUser = createParamDecorator(
+export const User = createParamDecorator(
   (
     key: keyof JwtPayload,
     ctx: ExecutionContext,

@@ -5,6 +5,7 @@ import { Strategy } from 'passport-google-oauth20';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
+  /* This code was update in future for google auth */
   //   constructor(private readonly configService: ConfigService) {
   //     super({
   //       clientID: configService.get('111111'), // получите это из Google Cloud Console

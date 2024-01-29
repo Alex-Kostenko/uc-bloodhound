@@ -6,7 +6,8 @@ import { genSaltSync, hashSync } from 'bcrypt';
 import { Cache } from 'cache-manager';
 import { convertToSecondsUtil } from 'src/utils';
 import { ConfigService } from '@nestjs/config';
-import { JwtPayload } from 'src/auth/interfaces';
+import { CreateUserDto } from './dto/createUser';
+import { UpdateUserDto } from './dto/updateUser';
 
 @Injectable()
 export class UserService {
@@ -41,13 +42,16 @@ export class UserService {
     });
   }
 
-  async createUser(data: Prisma.UserCreateInput): Promise<User> {
+  async createUser(data: CreateUserDto) {
     const hashedPassword = this.hashPassword(data.password);
     const newData = { ...data };
     newData.password = hashedPassword;
-    return this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: newData,
     });
+    const userWithoutPassword = { ...user, password: undefined };
+
+    return userWithoutPassword;
   }
 
   async findUser(idOrEmail: string) {
@@ -82,37 +86,40 @@ export class UserService {
     return user;
   }
 
-  async save(user: Partial<User>) {
-    const hashedPassword = user?.password
-      ? this.hashPassword(user.password)
-      : null;
-    const savedUser = await this.prisma.user.upsert({
-      where: {
-        email: user.email,
-      },
-      update: {
-        password: hashedPassword ?? undefined,
-        provider: user?.provider ?? undefined,
-      },
-      create: {
-        email: user.email,
-        password: hashedPassword,
-        provider: user?.provider,
-      },
+  async updateUser(params: {
+    where: string;
+    data: UpdateUserDto;
+  }): Promise<User> {
+    const { where, data } = params;
+
+    const user = await this.prisma.user.findFirst({
+      where: { id: where },
     });
-    await this.cacheManager.set(savedUser.id, savedUser);
-    await this.cacheManager.set(savedUser.email, savedUser);
-    return savedUser;
+
+    if (!user) {
+      throw new Error('User is not find');
+    }
+
+    if (data.password) {
+      return this.prisma.user.update({
+        where: { id: where },
+        data: {
+          ...data,
+          password: this.hashPassword(data.password),
+        },
+      });
+    } else {
+      return this.prisma.user.update({
+        where: { id: where },
+        data,
+      });
+    }
   }
 
-  async delete(id: string, user: JwtPayload) {
-    await Promise.all([
-      this.cacheManager.del(id),
-      this.cacheManager.del(user.email),
-    ]);
+  async delete(id: string) {
+    await Promise.all([this.cacheManager.del(id)]);
     return this.prisma.user.delete({
       where: { id },
-      select: { id: true },
     });
   }
 

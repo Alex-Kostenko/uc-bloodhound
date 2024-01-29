@@ -8,7 +8,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
-import { LoggerMiddleware } from './decorators/getUserMiddleware';
+import { UserMiddleware } from "./decorators/getUserMiddleware";
 
 @Module({
   imports: [
@@ -17,12 +17,12 @@ import { LoggerMiddleware } from './decorators/getUserMiddleware';
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
   ],
-  // providers: [UserMiddleware],
 })
+  
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(LoggerMiddleware)
+      .apply(UserMiddleware)
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

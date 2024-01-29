@@ -7,6 +7,11 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "provider" "Provider",
     "password" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "city" TEXT NOT NULL,
+    "nickName" TEXT NOT NULL,
+    "lastOnlineAt" TIMESTAMP(3),
     "isBlocked" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")

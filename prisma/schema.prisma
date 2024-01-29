@@ -11,12 +11,17 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  provider  Provider?
-  password  String
-  Token     Token[]
-  isBlocked Boolean   @default(false)
+  id           String    @id @default(uuid())
+  email        String    @unique
+  provider     Provider?
+  password     String
+  name         String
+  lastName     String
+  city         String
+  nickName     String
+  lastOnlineAt DateTime?
+  Token        Token[]
+  isBlocked    Boolean   @default(false)
 
   @@map("users")
 }
