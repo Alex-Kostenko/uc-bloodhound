@@ -2,6 +2,8 @@ import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
 
 import { Provider } from '.prisma/client';
 
+const a;
+
 export class CreateUserDto {
   @IsEmail()
   email: string;
