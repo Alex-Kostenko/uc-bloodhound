@@ -19,15 +19,21 @@
     "db:change": "prisma migrate dev --name",
     "db:deploy": "prisma migrate deploy",
     "db": "prisma studio",
-    "lint": "eslint --ext .tsx,.ts src/",
-    "lint:fix": "eslint --fix --ext .tsx,.ts src/",
-    "format": "prettier . --write",
+    "lint": "eslint . --ext .js,.ts,.tsx",
+    "tidy": "eslint . --ext .js,.ts,.tsx --fix",
+    "ts:check": "tsc --noEmit",
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.--write": "prettier --write",
-    "*.{tsx,ts}": "eslint --cache --fix"
+    "**/*.{js,ts,tsx}": [
+      "npm run tidy",
+      "bash -c 'npm run ts:check'"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.1",
