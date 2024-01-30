@@ -19,7 +19,7 @@
     "db:change": "prisma migrate dev --name",
     "db:deploy": "prisma migrate deploy",
     "db": "prisma studio",
-    "lint": "eslint . --ext .js,.ts,.tsx",
+    "lint": "eslint . --ext .js,.ts,.tsx --max-warnings=0",
     "tidy": "eslint . --ext .js,.ts,.tsx --fix",
     "ts:check": "tsc --noEmit"
   },
