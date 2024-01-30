@@ -1,2 +1,3 @@
 yarn tidy
 yarn ts:check
+yarn test
