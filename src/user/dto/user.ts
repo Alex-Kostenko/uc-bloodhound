@@ -1,19 +1,23 @@
-import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
+import { IsEmail, IsEnum, IsString, IsUUID, Length } from 'class-validator';
 
 import { Provider } from '.prisma/client';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateUserDto {
+export class UserDto {
+  @IsUUID()
   @ApiProperty()
+  id: string;
+
   @IsEmail()
+  @ApiProperty()
   email: string;
 
-  @IsEnum(Provider)
-  @ApiPropertyOptional()
-  provider?: Provider;
-
-  @IsString()
   @ApiProperty()
+  @IsEnum(Provider)
+  provider: Provider;
+
+  @ApiProperty()
+  @IsString()
   @Length(8, 255)
   password: string;
 

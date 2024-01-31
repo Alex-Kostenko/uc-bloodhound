@@ -4,7 +4,6 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  HttpStatus,
   Param,
   Post,
   Req,
@@ -13,20 +12,32 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { Public, UserAgent } from 'src/decorators';
 import { Token } from 'src/decorators/getvalidToken';
 import { CreateUserDto } from 'src/user/dto/createUser';
 
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto';
+import { LoginDto, TokenDto } from './dto';
 import { GoogleGuard } from './guargs/google.guard';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @Public()
 @Controller('auth')
+@ApiTags('Auth Controller')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiOperation({ summary: 'Register user' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({ status: 200, description: 'Successful operation' })
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('register')
   async register(@Body() dto: CreateUserDto) {
@@ -40,6 +51,9 @@ export class AuthController {
   }
 
   @Post('login')
+  @ApiOperation({ summary: 'Login user' })
+  @ApiBody({ type: LoginDto })
+  @ApiOkResponse({ type: TokenDto })
   async login(@Body() dto: LoginDto, @UserAgent() agent: string) {
     const tokens = await this.authService.login(dto, agent);
 
@@ -52,6 +66,9 @@ export class AuthController {
   }
 
   @Get('logout')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Logout user' })
+  @ApiResponse({ status: 200, description: 'Successful operation' })
   async logout(@Token('token') token: string, @Req() req: Request) {
     const user = req.user; //move to get else CRUD endpoints user's
 
@@ -61,6 +78,8 @@ export class AuthController {
   }
 
   @Get('refresh-tokens/:refreshToken')
+  @ApiOperation({ summary: "Refresh token when token's user expired" })
+  @ApiOkResponse({ type: TokenDto })
   async refreshTokens(
     @UserAgent() agent: string,
     @Param('refreshToken') refreshToken: string,
@@ -75,17 +94,19 @@ export class AuthController {
     return tokens;
   }
 
-  @UseGuards(GoogleGuard)
-  @Get('google')
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  googleAuth() {}
+  /*    this comment use in feature for  sign in through google      */
 
-  @UseGuards(GoogleGuard)
-  @Get('google/callback')
-  googleAuthCallback(@Req() req: Request, @Res() res: Response) {
-    const token = req.user['accessToken'];
-    return res.redirect(`ACCESS_TOKEN_GOOGLE${token}`);
-  }
+  //   @UseGuards(GoogleGuard)
+  //   @Get('google')
+  //   // eslint-disable-next-line @typescript-eslint/no-empty-function
+  //   googleAuth() {}
+  //
+  //   @UseGuards(GoogleGuard)
+  //   @Get('google/callback')
+  //   googleAuthCallback(@Req() req: Request, @Res() res: Response) {
+  //     const token = req.user['accessToken'];
+  //     return res.redirect(`ACCESS_TOKEN_GOOGLE${token}`);
+  //   }
 
   /*    this comment use in feature for  get user in google account      */
 
