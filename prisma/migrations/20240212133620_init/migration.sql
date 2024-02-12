@@ -1,11 +1,11 @@
 -- CreateEnum
-CREATE TYPE "Provider" AS ENUM ('GOOGLE');
+CREATE TYPE "Provider" AS ENUM ('GOOGLE', 'EMAIL');
 
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "provider" "Provider",
+    "provider" "Provider" NOT NULL DEFAULT 'EMAIL',
     "password" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,

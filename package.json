@@ -22,6 +22,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db:change": "prisma migrate dev --name",
     "db:deploy": "prisma migrate deploy",
+    "seed": "npx prisma db seed",
     "db": "prisma studio",
     "lint": "eslint . --ext .js,.ts,.tsx --max-warnings=0",
     "tidy": "eslint . --ext .js,.ts,.tsx --fix",
