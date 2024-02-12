@@ -7,19 +7,18 @@ import {
   Param,
   Post,
   Req,
-  Res,
   UnauthorizedException,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { Public, UserAgent } from 'src/decorators';
-import { Token } from 'src/decorators/getvalidToken';
-import { CreateUserDto } from 'src/user/dto/createUser';
+import { Public, UserAgent } from '../decorators';
+import { Token } from '../decorators/getvalidToken';
+import { CreateUserDto } from '../user/dto/createUser';
 
 import { AuthService } from './auth.service';
 import { LoginDto, TokenDto } from './dto';
-import { GoogleGuard } from './guargs/google.guard';
+
 import {
   ApiBearerAuth,
   ApiBody,

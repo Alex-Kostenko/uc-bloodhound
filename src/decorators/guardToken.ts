@@ -5,9 +5,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
+  constructor(private prisma: PrismaService) {}
+
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -24,7 +27,15 @@ export class JwtAuthGuard implements CanActivate {
     return isValidToken;
   }
 
-  private validateToken(token: string): boolean {
+  private async validateToken(token: string): Promise<boolean> {
+    const presentToken = await this.prisma.token.findFirst({
+      where: {
+        OR: [{ token }],
+      },
+    });
+    if (!presentToken) {
+      throw new UnauthorizedException('Does not have token');
+    }
     return !!token;
   }
 }

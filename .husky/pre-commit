@@ -1,3 +1,4 @@
 yarn tidy
 yarn ts:check
+npx prisma db seed
 yarn test

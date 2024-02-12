@@ -21,7 +21,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/decorators/guardToken';
+import { JwtAuthGuard } from '../decorators/guardToken';
 import { UserDto } from './dto/user';
 
 @Controller('user')
@@ -46,7 +46,7 @@ export class UserController {
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.createUser(createUserDto);
-    return { user };
+    return user;
   }
 
   @UseGuards(JwtAuthGuard)
@@ -54,7 +54,9 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Successful operation' })
   @Delete(':id')
   async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
-    return this.userService.delete(id);
+    const user = await this.userService.delete(id);
+    const userWithoutPassword = { ...user, password: undefined };
+    return userWithoutPassword;
   }
 
   @UseGuards(JwtAuthGuard)

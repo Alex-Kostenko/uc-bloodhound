@@ -1,6 +1,9 @@
 {
   "name": "uc-bloodhound",
   "version": "0.0.1",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "description": "",
   "author": "",
   "private": true,
@@ -12,6 +15,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "test": "jest",
+    "testS": "jest test/users/controllers/crud.e2e-spec.ts",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -43,6 +47,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "date-fns": "^3.3.1",
+    "http-status-codes": "^2.3.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",

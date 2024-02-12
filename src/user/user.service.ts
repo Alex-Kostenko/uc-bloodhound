@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { User, Prisma } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt';
 import { Cache } from 'cache-manager';
-import { convertToSecondsUtil } from 'src/utils';
+import { convertToSecondsUtil } from '../utils';
 
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -64,7 +64,11 @@ export class UserService {
     });
   }
 
-  async findOne(idOrEmail: string, isReset = false): Promise<User> {
+  async findOne(
+    idOrEmail: string,
+    isReset = false,
+    compare = false,
+  ): Promise<any> {
     if (isReset) {
       await this.cacheManager.del(idOrEmail);
     }
@@ -83,9 +87,17 @@ export class UserService {
         user,
         convertToSecondsUtil(this.configService.get('JWT_EXP')),
       );
+      if (compare) {
+        return user;
+      }
+      const userWithoutPassword = { ...user, password: undefined };
+      return userWithoutPassword;
+    }
+    if (compare) {
       return user;
     }
-    return user;
+    const userWithoutPassword = { ...user, password: undefined };
+    return userWithoutPassword;
   }
 
   async updateUser(params: {

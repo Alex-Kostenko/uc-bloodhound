@@ -10,9 +10,9 @@ import { JwtService } from '@nestjs/jwt';
 import { Provider, Token, User } from '@prisma/client';
 import { compareSync } from 'bcrypt';
 import { add } from 'date-fns';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto } from 'src/user/dto/createUser';
-import { UserService } from 'src/user/user.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateUserDto } from '../user/dto/createUser';
+import { UserService } from '../user/user.service';
 import { v4 } from 'uuid';
 
 import { LoginDto } from './dto';
@@ -67,8 +67,9 @@ export class AuthService {
   }
 
   async login(dto: LoginDto, agent: string): Promise<Tokens> {
+    // const user = await this.cacheManager.get<User>(idOrEmail);
     const user: User = await this.userService
-      .findOne(dto.email, true)
+      .findOne(dto.email, true, true)
       .catch((err) => {
         this.logger.error(err);
         return null;
@@ -79,7 +80,6 @@ export class AuthService {
     if (!user || user.isBlocked) {
       throw new UnauthorizedException('User is blocked');
     }
-
     return this.generateTokens(user, agent);
   }
 
@@ -89,7 +89,6 @@ export class AuthService {
       email: user.email,
       time: new Date(),
     });
-
     const token = await this.prismaService.token.create({
       data: {
         token: jwt,
