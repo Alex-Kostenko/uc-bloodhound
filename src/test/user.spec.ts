@@ -96,21 +96,21 @@ describe('users.crud', () => {
   });
 
   // test this case separately after user.spec and auth.spec
-  // it('/user/:id (DELETE) - should delete a user', async () => {
-  //   const result = await request(app.getHttpServer())
-  //     .delete('/user/b7ead333-0fb8-483c-bea3-61a0ad47ae0b')
-  //     .set('Authorization', testToken)
-  //     .expect(200);
-  //   expect(result.body).toEqual({
-  //     id: result.body.id,
-  //     email: result.body.email,
-  //     provider: result.body.provider,
-  //     name: result.body.name,
-  //     lastName: result.body.lastName,
-  //     city: result.body.city,
-  //     nickName: result.body.nickName,
-  //     lastOnlineAt: result.body.lastOnlineAt,
-  //     isBlocked: result.body.isBlocked,
-  //   });
-  // });
+  it('/user/:id (DELETE) - should delete a user', async () => {
+    const result = await request(app.getHttpServer())
+      .delete('/user/b8ead333-0fb8-483c-bea3-61a0ad47ae0b')
+      .set('Authorization', testToken)
+      .expect(200);
+    expect(result.body).toEqual({
+      id: result.body.id,
+      email: result.body.email,
+      provider: result.body.provider,
+      name: result.body.name,
+      lastName: result.body.lastName,
+      city: result.body.city,
+      nickName: result.body.nickName,
+      lastOnlineAt: result.body.lastOnlineAt,
+      isBlocked: result.body.isBlocked,
+    });
+  });
 });

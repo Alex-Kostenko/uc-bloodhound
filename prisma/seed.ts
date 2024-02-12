@@ -14,6 +14,19 @@ async function main() {
     },
   });
 
+  await prisma.user.create({
+    data: {
+      id: 'b8ead333-0fb8-483c-bea3-61a0ad47ae0b',
+      email: 'Nipel@prisma.io',
+      provider: 'GOOGLE',
+      password: '$2b$10$5tBDbKQNH3oAO2ZGo0KvWu/VJ0aNTADBr8HkAldsXuQk2rIqkVbqG',
+      name: 'Nipel',
+      lastName: 'Model',
+      city: 'Kyiv',
+      nickName: 'Tachka',
+    },
+  });
+
   await prisma.token.create({
     data: {
       token:

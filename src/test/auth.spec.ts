@@ -63,4 +63,13 @@ describe('users.auth', () => {
       .set('User-Agent', 'Your User Agent String')
       .expect(201);
   });
+
+  it('/auth/refresh-tokens/:refreshToken (GET)', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/auth/refresh-tokens/refresh_token_test')
+      .set('User-Agent', 'Agent String')
+      .expect(200);
+    expect(response.body.accessToken).toBeDefined();
+    expect(response.body.refreshToken).toBeDefined();
+  });
 });
