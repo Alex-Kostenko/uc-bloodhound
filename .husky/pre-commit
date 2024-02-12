@@ -1,4 +1,4 @@
 yarn tidy
 yarn ts:check
-npx prisma db seed
+npx prisma migrate reset --force
 yarn test
