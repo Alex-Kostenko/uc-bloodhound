@@ -1,0 +1,5 @@
+yarn tidy
+yarn ts:check
+yarn reset
+yarn test
+yarn test:e2e

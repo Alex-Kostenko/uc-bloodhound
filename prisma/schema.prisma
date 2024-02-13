@@ -11,9 +11,33 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  name     String
-  lastName String
-  password String
+  id           String    @id @default(uuid())
+  email        String    @unique
+  provider     Provider  @default(EMAIL)
+  password     String
+  name         String
+  lastName     String
+  city         String
+  nickName     String
+  lastOnlineAt DateTime?
+  Token        Token[]
+  isBlocked    Boolean   @default(false)
+
+  @@map("users")
+}
+
+model Token {
+  token     String   @unique
+  exp       DateTime
+  userId    String
+  refresh   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAgent String   @map("user_agent")
+
+  @@map("tokens")
+}
+
+enum Provider {
+  GOOGLE
+  EMAIL
 }
