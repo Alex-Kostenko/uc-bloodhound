@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { User, Prisma } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt';
 import { Cache } from 'cache-manager';
-import { convertToSecondsUtil } from '../utils';
 
 import { PrismaService } from '../prisma/prisma.service';
+import { convertToSecondsUtil } from '../utils';
 
 import { CreateUserDto } from './dto/createUser';
 import { UpdateUserDto } from './dto/updateUser';

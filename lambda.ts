@@ -1,11 +1,11 @@
 // lambda.ts
-import { Handler, Context } from 'aws-lambda';
 import { Server } from 'http';
-import { createServer, proxy } from 'aws-serverless-express';
-import { eventContext } from 'aws-serverless-express/middleware';
 
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
+import { Handler, Context } from 'aws-lambda';
+import { createServer, proxy } from 'aws-serverless-express';
+import { eventContext } from 'aws-serverless-express/middleware';
 import { AppModule } from 'src/app.module';
 
 const express = require('express');

@@ -8,10 +8,11 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { compareSync } from 'bcrypt';
 import { add } from 'date-fns';
+import { v4 } from 'uuid';
+
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from '../user/dto/createUser';
 import { UserService } from '../user/user.service';
-import { v4 } from 'uuid';
 
 import { LoginDto } from './dto';
 import { Tokens } from './interfaces';

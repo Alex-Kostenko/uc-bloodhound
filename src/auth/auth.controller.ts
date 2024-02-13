@@ -8,13 +8,6 @@ import {
   Post,
   UseInterceptors,
 } from '@nestjs/common';
-import { Public, UserAgent } from '../decorators';
-import { Token } from '../decorators/getvalidToken';
-import { CreateUserDto } from '../user/dto/createUser';
-
-import { AuthService } from './auth.service';
-import { LoginDto, TokenDto } from './dto';
-
 import {
   ApiBearerAuth,
   ApiBody,
@@ -24,7 +17,14 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { classToPlain } from 'class-transformer';
+
+import { Public, UserAgent } from '../decorators';
+import { Token } from '../decorators/getvalidToken';
+import { CreateUserDto } from '../user/dto/createUser';
 import { UserDto } from '../user/dto/user';
+
+import { AuthService } from './auth.service';
+import { LoginDto, TokenDto } from './dto';
 
 @Public()
 @Controller('auth')

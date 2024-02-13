@@ -51,7 +51,7 @@ module.exports = {
       },
     ],
     'import/order': [
-      'off',
+      'error',
       {
         groups: [
           'builtin',
