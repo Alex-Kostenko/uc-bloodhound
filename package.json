@@ -27,6 +27,7 @@
     "lint": "eslint . --ext .js,.ts,.tsx --max-warnings=0",
     "tidy": "eslint . --ext .js,.ts,.tsx --fix",
     "ts:check": "tsc --noEmit",
+    "spellcheck": "cspell '**/*.{ts,js,json}'",
     "prepare": "husky"
   },
   "dependencies": {
@@ -47,6 +48,7 @@
     "cache-manager": "^5.4.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "cspell": "^8.3.2",
     "date-fns": "^3.3.1",
     "http-status-codes": "^2.3.0",
     "passport": "^0.7.0",

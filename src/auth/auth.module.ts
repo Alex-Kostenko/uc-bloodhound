@@ -5,13 +5,13 @@ import { PassportModule } from '@nestjs/passport';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { options } from './connfig';
-import { STRTAGIES } from './strategies';
+import { options } from './config';
+import { STRATEGIES } from './strategies';
 import { UserModule } from '../user/user.module';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, ...STRTAGIES],
+  providers: [AuthService, ...STRATEGIES],
   imports: [
     PassportModule,
     JwtModule.registerAsync(options()),

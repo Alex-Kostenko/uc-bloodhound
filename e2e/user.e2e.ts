@@ -50,7 +50,7 @@ describe('users.crud', () => {
       name: 'Car',
       lastName: 'Model',
       city: 'Che',
-      nickName: 'Tachka',
+      nickName: 'Wrangler',
     };
 
     const result = await request(app.getHttpServer())
@@ -87,7 +87,7 @@ describe('users.crud', () => {
 
   it('/user/update/:id (PATCH) - check validation for wrong email', async () => {
     const updatedUserData = {
-      email: 'tedecom',
+      email: 'bear',
     };
 
     await request(app.getHttpServer())

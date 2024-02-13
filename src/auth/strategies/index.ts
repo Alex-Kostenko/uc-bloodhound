@@ -1,6 +1,6 @@
 import { JwtStrategy } from './jwt.strategy';
 
-export const STRTAGIES = [
+export const STRATEGIES = [
   JwtStrategy,
   /*For google auth*/
   // GoogleStrategy
