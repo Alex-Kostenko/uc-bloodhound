@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../app.module';
+import { AppModule } from '../src/app.module';
 import { testToken } from './utils/token';
 
 const userId = 'b7ead333-0fb8-483c-bea3-61a0ad47ae0b';
