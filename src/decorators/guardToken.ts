@@ -19,19 +19,15 @@ export class JwtAuthGuard implements CanActivate {
     if (!request.headers.authorization) {
       throw new UnauthorizedException('Does not have token');
     }
-
     const token = request.headers.authorization?.replace('Bearer ', '');
 
     const isValidToken = this.validateToken(token);
-
     return isValidToken;
   }
 
   private async validateToken(token: string): Promise<boolean> {
     const presentToken = await this.prisma.token.findFirst({
-      where: {
-        OR: [{ token }],
-      },
+      where: { token },
     });
     if (!presentToken) {
       throw new UnauthorizedException('Does not have token');

@@ -71,7 +71,7 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
-    '@typescript-eslint/no-unused-vars': ['off', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-vars': 2,
     'import/prefer-default-export': 'off',
     'no-nested-ternary': 'off',
   },

@@ -6,12 +6,9 @@ import {
   Get,
   Param,
   Post,
-  Req,
   UnauthorizedException,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { Public, UserAgent } from '../decorators';
 import { Token } from '../decorators/getvalidToken';
 import { CreateUserDto } from '../user/dto/createUser';
@@ -27,6 +24,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { classToPlain } from 'class-transformer';
+import { UserDto } from '../user/dto/user';
 
 @Public()
 @Controller('auth')
@@ -46,7 +45,7 @@ export class AuthController {
         `Unable to register a user with data ${JSON.stringify(dto)}`,
       );
     }
-    return user;
+    return classToPlain(UserDto, user);
   }
 
   @Post('login')
@@ -68,12 +67,8 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Logout user' })
   @ApiResponse({ status: 200, description: 'Successful operation' })
-  async logout(@Token('token') token: string, @Req() req: Request) {
-    const user = req.user; //move to get else CRUD endpoints user's
-
-    const deleteToken = await this.authService.deleteToken(token);
-
-    return deleteToken;
+  async logout(@Token('token') token: string) {
+    return this.authService.deleteToken(token);
   }
 
   @Get('refresh-tokens/:refreshToken')

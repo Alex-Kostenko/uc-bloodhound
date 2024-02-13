@@ -4,6 +4,8 @@ import * as request from 'supertest';
 import { AppModule } from '../app.module';
 import { testToken } from './utils/token';
 
+const userId = 'b7ead333-0fb8-483c-bea3-61a0ad47ae0b';
+
 describe('users.crud', () => {
   let app: INestApplication;
 
@@ -23,7 +25,7 @@ describe('users.crud', () => {
 
   it('/users/:idOrEmail (GET) - should return a user by ID or Email', async () => {
     const result = await request(app.getHttpServer())
-      .get('/user/b7ead333-0fb8-483c-bea3-61a0ad47ae0b')
+      .get(`/user/${userId}`)
       .set('Authorization', testToken);
 
     expect(200);
@@ -75,7 +77,7 @@ describe('users.crud', () => {
     };
 
     const response = await request(app.getHttpServer())
-      .patch('/user/updateb7ead333-0fb8-483c-bea3-61a0ad47ae0b')
+      .patch(`/user/update/${userId}`)
       .set('Authorization', testToken)
       .send(updatedUserData)
       .expect(200);
@@ -89,7 +91,7 @@ describe('users.crud', () => {
     };
 
     await request(app.getHttpServer())
-      .patch('/user/updateb7ead333-0fb8-483c-bea3-61a0ad47ae0b')
+      .patch(`/user/update/${userId}`)
       .set('Authorization', testToken)
       .send(updatedUserData)
       .expect(400);

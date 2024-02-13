@@ -23,6 +23,7 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../decorators/guardToken';
 import { UserDto } from './dto/user';
+import { plainToClass } from 'class-transformer';
 
 @Controller('user')
 @ApiBearerAuth()
@@ -36,7 +37,7 @@ export class UserController {
   @Get(':idOrEmail')
   async findOneUser(@Param('idOrEmail') idOrEmail: string) {
     const user = await this.userService.findOne(idOrEmail);
-    return user;
+    return plainToClass(UserDto, user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -46,7 +47,7 @@ export class UserController {
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {
     const user = await this.userService.createUser(createUserDto);
-    return user;
+    return plainToClass(UserDto, user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -55,20 +56,19 @@ export class UserController {
   @Delete(':id')
   async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     const user = await this.userService.delete(id);
-    const userWithoutPassword = { ...user, password: undefined };
-    return userWithoutPassword;
+    return plainToClass(UserDto, user);
   }
 
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update user' })
   @ApiOkResponse({ type: UserDto })
-  @ApiBody({ type: UpdateUserDto })
-  @Patch('/update:id')
-  async update(@Param('id') id, @Body() createUserDto: UpdateUserDto) {
+  @ApiBody({ type: UserDto })
+  @Patch('/update/:id')
+  async update(@Param('id') id: string, @Body() user: UpdateUserDto) {
     const updateUser = await this.userService.updateUser({
       where: id,
-      data: createUserDto,
+      data: user,
     });
-    return updateUser;
+    return plainToClass(UserDto, updateUser);
   }
 }

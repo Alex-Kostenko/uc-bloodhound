@@ -1,5 +1,5 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { User, Prisma } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt';
@@ -44,16 +44,11 @@ export class UserService {
     });
   }
 
-  async createUser(data: CreateUserDto) {
+  async createUser(data: CreateUserDto): Promise<User> {
     const hashedPassword = this.hashPassword(data.password);
-    const newData = { ...data };
-    newData.password = hashedPassword;
-    const user = await this.prisma.user.create({
-      data: newData,
+    return this.prisma.user.create({
+      data: { ...data, password: hashedPassword },
     });
-    const userWithoutPassword = { ...user, password: undefined };
-
-    return userWithoutPassword;
   }
 
   async findUser(idOrEmail: string) {
@@ -64,40 +59,30 @@ export class UserService {
     });
   }
 
-  async findOne(
-    idOrEmail: string,
-    isReset = false,
-    compare = false,
-  ): Promise<any> {
+  async findOne(idOrEmail: string, isReset = false): Promise<User> {
     if (isReset) {
       await this.cacheManager.del(idOrEmail);
     }
-    const user = await this.cacheManager.get<User>(idOrEmail);
-    if (!user) {
+    const cachedUser = await this.cacheManager.get<User>(idOrEmail);
+    if (!cachedUser) {
       const user = await this.prisma.user.findFirst({
         where: {
           OR: [{ id: idOrEmail }, { email: idOrEmail }],
         },
       });
       if (!user) {
-        return null;
+        throw new BadRequestException();
       }
       await this.cacheManager.set(
         idOrEmail,
         user,
         convertToSecondsUtil(this.configService.get('JWT_EXP')),
       );
-      if (compare) {
-        return user;
-      }
-      const userWithoutPassword = { ...user, password: undefined };
-      return userWithoutPassword;
-    }
-    if (compare) {
+
       return user;
     }
-    const userWithoutPassword = { ...user, password: undefined };
-    return userWithoutPassword;
+
+    return cachedUser;
   }
 
   async updateUser(params: {
@@ -131,7 +116,7 @@ export class UserService {
   }
 
   async delete(id: string) {
-    await Promise.all([this.cacheManager.del(id)]);
+    await this.cacheManager.del(id);
     return this.prisma.user.delete({
       where: { id },
     });

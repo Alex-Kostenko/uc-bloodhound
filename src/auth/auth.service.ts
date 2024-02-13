@@ -1,13 +1,11 @@
 import {
   ConflictException,
-  HttpException,
-  HttpStatus,
   Injectable,
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Provider, Token, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { compareSync } from 'bcrypt';
 import { add } from 'date-fns';
 import { PrismaService } from '../prisma/prisma.service';
@@ -69,7 +67,7 @@ export class AuthService {
   async login(dto: LoginDto, agent: string): Promise<Tokens> {
     // const user = await this.cacheManager.get<User>(idOrEmail);
     const user: User = await this.userService
-      .findOne(dto.email, true, true)
+      .findOne(dto.email, true)
       .catch((err) => {
         this.logger.error(err);
         return null;
