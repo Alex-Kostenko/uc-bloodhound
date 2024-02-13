@@ -101,28 +101,6 @@ export class AuthService {
     return { accessToken, refreshToken: token.refresh };
   }
 
-  //   private async updateToken(token: string, agent: string): Promise<Token> {
-  //     const userJWT = await this.jwtService.decode(token);
-  //     const { id, email } = userJWT;
-  //
-  //     const jwt = this.jwtService.sign({ id, email });
-  //
-  //     return this.prismaService.token.upsert({
-  //       where: { token },
-  //       update: {
-  //         token: jwt,
-  //         exp: add(new Date(), { months: 1 }),
-  //       },
-  //       create: {
-  //         token: jwt,
-  //         exp: add(new Date(), { months: 1 }),
-  //         userId: id,
-  //         userAgent: agent,
-  //         refresh: v4(),
-  //       },
-  //     });
-  //   }
-
   async deleteToken(token: string) {
     const tokenUser = await this.prismaService.token.findFirst({
       where: { token },
@@ -139,30 +117,4 @@ export class AuthService {
 
     return this.prismaService.token.delete({ where: { token } });
   }
-
-  // async providerAuth(email: string, agent: string, provider: Provider) {
-  //   const userExists = await this.userService.findOne(email);
-  //   if (userExists) {
-  //     const user = await this.userService
-  //       .save({ email, provider })
-  //       .catch((err) => {
-  //         this.logger.error(err);
-  //         return null;
-  //       });
-  //     return this.generateTokens(user, agent);
-  //   }
-  //   const user = await this.userService
-  //     .save({ email, provider })
-  //     .catch((err) => {
-  //       this.logger.error(err);
-  //       return null;
-  //     });
-  //   if (!user) {
-  //     throw new HttpException(
-  //       `Failed to create a user with email ${email} в Google auth`,
-  //       HttpStatus.BAD_REQUEST,
-  //     );
-  //   }
-  //   return this.generateTokens(user, agent);
-  // }
 }

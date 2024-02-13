@@ -6,7 +6,6 @@ import {
   Get,
   Param,
   Post,
-  UnauthorizedException,
   UseInterceptors,
 } from '@nestjs/common';
 import { Public, UserAgent } from '../decorators';
@@ -68,7 +67,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Logout user' })
   @ApiResponse({ status: 200, description: 'Successful operation' })
   async logout(@Token('token') token: string) {
-    return this.authService.deleteToken(token);
+    await this.authService.deleteToken(token);
   }
 
   @Get('refresh-tokens/:refreshToken')
@@ -79,48 +78,12 @@ export class AuthController {
     @Param('refreshToken') refreshToken: string,
   ) {
     if (!refreshToken) {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
     const tokens = await this.authService.refreshTokens(refreshToken, agent);
     if (!tokens) {
-      throw new UnauthorizedException();
+      throw new BadRequestException();
     }
     return tokens;
   }
-
-  /*    this comment use in feature for  sign in through google      */
-
-  //   @UseGuards(GoogleGuard)
-  //   @Get('google')
-  //   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  //   googleAuth() {}
-  //
-  //   @UseGuards(GoogleGuard)
-  //   @Get('google/callback')
-  //   googleAuthCallback(@Req() req: Request, @Res() res: Response) {
-  //     const token = req.user['accessToken'];
-  //     return res.redirect(`ACCESS_TOKEN_GOOGLE${token}`);
-  //   }
-
-  /*    this comment use in feature for  get user in google account      */
-
-  // @Get('success-google')
-  // // eslint-disable-next-line @typescript-eslint/no-empty-function
-  // successGoogle(
-  //   @Query('token') token: string,
-  //   @UserAgent() agent: string,
-  //   @Res() res: Response,
-  // ) {
-  //   return this.httpService
-  //     .get(
-  //       `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${token}`,
-  //     )
-  //     .pipe(
-  //       mergeMap(({ data: { email } }) =>
-  //         this.authService.providerAuth(email, agent, Provider.GOOGLE),
-  //       ),
-  //       map((data) => this.setRefreshTokenToCookies(data, res)),
-  //       handleTimeoutAndErrors(),
-  //     );
-  // }
 }
