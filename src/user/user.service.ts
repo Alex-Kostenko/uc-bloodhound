@@ -5,11 +5,10 @@ import { User, Prisma } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt';
 import { Cache } from 'cache-manager';
 
-import { PrismaService } from '../prisma/prisma.service';
-import { convertToSecondsUtil } from '../utils';
-
-import { CreateUserDto } from './dto/createUser';
-import { UpdateUserDto } from './dto/updateUser';
+import { PrismaService } from '@/prisma/prisma.service';
+import { CreateUserDto } from '@/user/dto/createUser';
+import { UpdateUserDto } from '@/user/dto/updateUser';
+import { convertToSecondsUtil } from '@/utils';
 
 @Injectable()
 export class UserService {

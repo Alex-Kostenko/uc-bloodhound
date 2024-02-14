@@ -1,1 +1,1 @@
-export * from './jwt-module-async-options';
+export * from '@/auth/config/jwt-module-async-options';

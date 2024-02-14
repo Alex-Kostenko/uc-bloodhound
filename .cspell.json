@@ -2,11 +2,12 @@
     "version": "0.1",
     "language": "en",
     "words": [],
-    "ignorePaths": ["node_modules/**","./dist/**","./prisma/**","./package.json","./e2e/utils/token.ts"],
+    "ignorePaths": ["node_modules/**","./dist/**","./prisma/**","./package.json","./src/test/e2e/utils/token.ts"],
     "ignoreWords": [
       "NestJS",
       "CSpell",
-      "getvalid"
+      "getvalid",
+      "guargs"
     ]
   }
   

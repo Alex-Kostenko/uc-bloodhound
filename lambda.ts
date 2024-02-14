@@ -6,7 +6,8 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import { Handler, Context } from 'aws-lambda';
 import { createServer, proxy } from 'aws-serverless-express';
 import { eventContext } from 'aws-serverless-express/middleware';
-import { AppModule } from 'src/app.module';
+
+import { AppModule } from '@/app.module';
 
 const express = require('express');
 
