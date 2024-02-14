@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { AuthModule } from './auth/auth.module';
-import { UserMiddleware } from './decorators/getUserMiddleware';
-import { PrismaModule } from './prisma/prisma.module';
-import { UserModule } from './user/user.module';
+import { AuthModule } from '@/auth/auth.module';
+import { UserMiddleware } from '@/decorators/getUserMiddleware';
+import { PrismaModule } from '@/prisma/prisma.module';
+import { UserModule } from '@/user/user.module';
 
 @Module({
   imports: [

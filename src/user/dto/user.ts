@@ -1,8 +1,7 @@
-import { IsEmail, IsEnum, IsString, IsUUID, Length } from 'class-validator';
-
 import { Provider } from '.prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+import { IsEmail, IsEnum, IsString, IsUUID, Length } from 'class-validator';
 
 export class UserDto {
   @IsUUID()

@@ -51,7 +51,7 @@ module.exports = {
       },
     ],
     'import/order': [
-      'off',
+      'error',
       {
         groups: [
           'builtin',
@@ -68,6 +68,7 @@ module.exports = {
         },
       },
     ],
+
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
@@ -75,6 +76,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-nested-ternary': 'off',
   },
+
   settings: {
     'import/resolver': {
       alias: {

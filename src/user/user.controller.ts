@@ -9,10 +9,6 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-
-import { CreateUserDto } from './dto/createUser';
-import { UpdateUserDto } from './dto/updateUser';
-import { UserService } from './user.service';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -21,9 +17,13 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../decorators/guardToken';
-import { UserDto } from './dto/user';
 import { plainToClass } from 'class-transformer';
+
+import { JwtAuthGuard } from '@/decorators/guardToken';
+import { CreateUserDto } from '@/user/dto/createUser';
+import { UpdateUserDto } from '@/user/dto/updateUser';
+import { UserDto } from '@/user/dto/user';
+import { UserService } from '@/user/user.service';
 
 @Controller('user')
 @ApiBearerAuth()

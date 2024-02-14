@@ -10,6 +10,10 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@e2e/*": ["src/test/e2e/*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,

@@ -1,5 +1,5 @@
 yarn tidy
 yarn ts:check
 yarn reset
+yarn spellcheck
 yarn test
-yarn test:e2e

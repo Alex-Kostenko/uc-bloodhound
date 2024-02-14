@@ -8,13 +8,13 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { compareSync } from 'bcrypt';
 import { add } from 'date-fns';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserDto } from '../user/dto/createUser';
-import { UserService } from '../user/user.service';
 import { v4 } from 'uuid';
 
-import { LoginDto } from './dto';
-import { Tokens } from './interfaces';
+import { LoginDto } from '@/auth/dto';
+import { Tokens } from '@/auth/interfaces';
+import { PrismaService } from '@/prisma/prisma.service';
+import { CreateUserDto } from '@/user/dto/createUser';
+import { UserService } from '@/user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -109,11 +109,6 @@ export class AuthService {
     if (!tokenUser) {
       throw new UnauthorizedException('Token does not found');
     }
-
-    await this.prismaService.user.update({
-      where: { id: tokenUser.userId },
-      data: { lastOnlineAt: new Date() },
-    });
 
     return this.prismaService.token.delete({ where: { token } });
   }
