@@ -16,12 +16,13 @@ model User {
   provider     Provider  @default(EMAIL)
   password     String
   name         String
-  lastName     String
+  lastName     String    @map("last_name")
   city         String
-  nickName     String
-  lastOnlineAt DateTime?
-  Token        Token[]
-  isBlocked    Boolean   @default(false)
+  nickName     String    @map("nick_name")
+  lastOnlineAt DateTime? @map("last_online_at")
+  isBlocked    Boolean   @default(false) @map("is_blocked")
+
+  token Token[]
 
   @@map("users")
 }
@@ -29,12 +30,252 @@ model User {
 model Token {
   token     String   @unique
   exp       DateTime
-  userId    String
+  userId    String   @map("user_id")
   refresh   String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userAgent String   @map("user_agent")
 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("tokens")
+}
+
+model Model {
+  id        String   @id @default(uuid())
+  name      String
+  popular   Float
+  logo      String
+  yearStart DateTime @map("year_start")
+  yearEnd   DateTime @map("year_end")
+  brandId   String   @map("brand_id")
+
+  brand   Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  vehicle Vehicle[]
+
+  @@map("models")
+}
+
+model Country {
+  countryCode String @id @unique @map("country_code")
+  name        String
+  code        String
+
+  vehicle Vehicle[]
+
+  @@map("countries")
+}
+
+model VehicleOptions {
+  id   String @id @default(uuid())
+  name String
+
+  vehicle VehicleOnVehicleOptions[]
+  type    OptionsType[]
+
+  @@map("vehiclesOptions")
+}
+
+model VehicleOnVehicleOptions {
+  optionId  String @map("option_id")
+  vehicleId String @map("vehicle_id")
+
+  vehicle Vehicle        @relation(fields: [vehicleId], references: [id])
+  option  VehicleOptions @relation(fields: [optionId], references: [id])
+
+  @@id([optionId, vehicleId])
+}
+
+model Brand {
+  id      String @id @default(uuid())
+  name    String
+  popular Float
+  logo    String
+
+  models  Model[]
+  vehicle Vehicle[]
+
+  @@map("brands")
+}
+
+model Vehicle {
+  id              String         @id @default(uuid())
+  brandId         String         @map("brand_id")
+  modelId         String         @map("model_id")
+  year            DateTime
+  description     String
+  price           Float
+  odometre        Float
+  engine          Decimal
+  fuel            Fuel
+  color           String
+  transmission    Transmission
+  type            Type
+  bodyType        BodyType       @map("body_type")
+  region          Region
+  city            String
+  isRoadAccident  Boolean        @map("is_road_accident")
+  condition       Condition
+  paintCondition  PaintCondition @map("paint_condition")
+  isInUkr         Boolean        @map("is_in_ukr")
+  isCleaning      Boolean        @map("is_cleaning")
+  isFromUSA       Boolean        @map("is_from_usa")
+  isInCreadit     Boolean        @map("is_in_creadit")
+  isInConfiscat   Boolean        @map("is_in_confiscat")
+  seller          Seller
+  driveFromId     String         @map("drive_from_id")
+  driveType       DriverType     @map("drive_type")
+  eco             Eco
+  fuelConsumption Decimal        @map("fuel_consumption")
+  engineType      engineType     @map("engine_type")
+  enginePower     Float          @map("engine_power")
+  countOfDoor     CountOfDoor    @map("count_of_door")
+  countOfSeat     Decimal        @map("count_of_seat")
+  vinCode         String         @map("vin_code")
+  isSaling        String         @map("is_saling")
+  isNewCar        Boolean        @map("is_new_car")
+  isCycles        Boolean        @map("is_cycles")
+  weight          Float
+
+  driverFrom Country                   @relation(fields: [driveFromId], references: [countryCode])
+  brand      Brand                     @relation(fields: [brandId], references: [id])
+  model      Model                     @relation(fields: [modelId], references: [id])
+  options    VehicleOnVehicleOptions[]
+
+  @@map("vehicles")
+}
+
+model OptionsType {
+  id               String @id @default(uuid())
+  name             String
+  type             String
+  vehicleOptionsId String @map("vehicle_options_id")
+
+  user VehicleOptions @relation(fields: [vehicleOptionsId], references: [id], onDelete: Cascade)
+
+  @@map("optionsTypes")
+}
+
+enum Fuel {
+  GAS
+  KEROSENE
+  PROPANE_BUTANE
+  METHANE
+  HYBRID_HEV
+  HYBRID_PHEV
+  DIESEL
+  ELECTRO
+}
+
+enum Transmission {
+  MANUAL
+  AUTOMATIC
+  TIPTRONIC
+  ROBOT
+  VARIATOR
+}
+
+enum Type {
+  ALL_TYPE
+  LIGHTWEIGHT
+  MOTTO
+  TRUCKS
+  TRAILER
+  SPECIAL_EQUIPMENT
+  AGRICULTURAL_MACHINERY
+  BUSES
+  WATER_TRANSPORT
+  AIR_TRANSPORT
+  MOTOR_HOMES
+}
+
+enum BodyType {
+  SEDAN
+  STATION_WAGON
+  SUV_CROSSOVER
+  MINIVAN
+  LIFTBACK
+  MICROWAVE
+  COUPE
+  PICKUP
+  ROADSTER
+  HATCHBACK
+  CABRIOLET
+  LIMOUSINE
+  FASTBACK
+}
+
+enum Region {
+  VINNYTSIA
+  VOLYN
+  DNIPROPETROVSK
+  DONETSK
+  ZHYTOMYR
+  ZAKARPATTIA
+  ZAPORIZHIA
+  IVANO_FRANKIVSK
+  KYIV
+  KYIVOBL
+  KIROVOHRAD
+  LUHANSK
+  LVIV
+  MYKOLAIV
+  ODESSA
+  POLTAVA
+  RIVNE
+  SUMY
+  TERNOPIL
+  KHARKIV
+  KHERSON
+  KHMELNYTSKYI
+  CHERKASY
+  CHERNIVTSI
+  CHERNIHIV
+}
+
+enum Condition {
+  COMPLETELY_INTACT
+  PROFESSIONALLY_REPAIR
+  UNREPAIRED
+  NO_RUN
+}
+
+enum PaintCondition {
+  NEW
+  PROFFESIONAL_REPAIR
+  NO_REPAIR
+}
+
+enum Seller {
+  ALL
+  COMPANY
+  PRIVATE_PERSONE
+}
+
+enum DriverType {
+  FRONT
+  FULL
+  REAR
+}
+
+enum Eco {
+  EURO6
+  EURO5
+  EURO4
+  EURO3
+  EURO2
+  EURO1
+}
+
+enum engineType {
+  OPPOSITE
+  V_SHAPED
+  ORDINARY
+  OTHER
+}
+
+enum CountOfDoor {
+  THREE
+  FIVE
+  OTHER
 }
 
 enum Provider {
