@@ -11,12 +11,15 @@ import { UserMiddleware } from '@/decorators/getUserMiddleware';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { UserModule } from '@/user/user.module';
 
+import { BrandModule } from './brand/brand.module';
+
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     UserModule,
     PrismaModule,
     AuthModule,
-    ConfigModule.forRoot({ isGlobal: true }),
+    BrandModule,
   ],
 })
 export class AppModule implements NestModule {
